@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NUnit.Framework;
 using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
@@ -74,6 +76,21 @@ public class Grid
 		var intZ = Mathf.RoundToInt(percentZ * (_height - 1));
 
 		return _nodes[intX + intZ * _width];
+	}
+	
+	// TODO(FD): increase possible selections
+	public List<GridNode> GetNodesBetween(GridNode nodeA, GridNode nodeB)
+	{
+		var result = new List<GridNode>();
+		var origin = nodeA.GridIndex < nodeB.GridIndex ? nodeA : nodeB;
+		var target = origin == nodeA ? nodeB : nodeA;
+
+		for (int i = origin.GridIndex; i < target.GridIndex; i++)
+		{
+			result.Add(_nodes[i]);
+		}
+
+		return result;
 	}
 	
 	public int GetWidth() => _width;

@@ -14,16 +14,20 @@ public class BuildMenu : MonoBehaviour
 	[SerializeField] private BuildMenuEntry entryPrefab;
 	
 	private int _selectedBuildingIndex;
-	private GameObject _buildingPreview;
+	private List<GameObject> _buildingPreviews;
+	private GridNode _firstHit;
+	private List<GridNode> _selectedNodes;
 
 	private EntityManager _entityManager;
 	private BlobAssetStore _blobAssetStore;
 	private PathfindingRefreshSystem _pathfindingRefreshSystem;
 
-	
+
 	private void Start()
 	{
 		_selectedBuildingIndex = -1;
+		_buildingPreviews = new List<GameObject>();
+		_selectedNodes = new List<GridNode>();
 		
 		_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 		_blobAssetStore = new BlobAssetStore();
@@ -54,7 +58,7 @@ public class BuildMenu : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			_selectedBuildingIndex = -1;
-			Destroy(_buildingPreview.gameObject);
+			DestroyBuildingPreviews();
 			return;
 		}
 		
@@ -67,34 +71,90 @@ public class BuildMenu : MonoBehaviour
 			return;
 		
 		var closestNode = GridController.Instance.Grid.GetClosestNode(raycastHit.Position);
-		_buildingPreview.transform.position = closestNode.WorldPosition;
 
 		if (Input.GetMouseButtonDown(0) && !closestNode.IsBlocked)
 		{
-			PlaceSelectedBuildingAt(closestNode);
+			_firstHit = closestNode;
+		}
+
+		if (Input.GetMouseButton(0))
+		{
+			_selectedNodes = GridController.Instance.Grid.GetNodesBetween(
+				_firstHit, 
+				closestNode);
+
+			if (_buildingPreviews.Count < _selectedNodes.Count)
+			{
+				for (var i = _buildingPreviews.Count; i < _selectedNodes.Count; i++)
+				{
+					_buildingPreviews.Add(Instantiate(buildEntries[_selectedBuildingIndex].buildingPreview));
+				}
+			}
+			else if (_buildingPreviews.Count > _selectedNodes.Count)
+			{
+				for (var i = _selectedNodes.Count; i < _buildingPreviews.Count; i++)
+				{
+					var toRemove = _buildingPreviews[i];
+					_buildingPreviews.Remove(toRemove);
+					Destroy(toRemove);
+				}
+			}
+			
+			for (var i = 0; i < _selectedNodes.Count - 1; i++)
+			{
+				_buildingPreviews[i].transform.position = _selectedNodes[i].WorldPosition;
+			}
+		}
+		else
+		{
+			if (_buildingPreviews.Count == 0)
+			{
+				_buildingPreviews.Add(Instantiate(buildEntries[_selectedBuildingIndex].buildingPreview));
+			}
+			_buildingPreviews[0].transform.position = closestNode.WorldPosition;
+		}
+		
+		if (Input.GetMouseButtonUp(0) && !closestNode.IsBlocked)
+		{
+			PlaceSelectedBuildingsAt(_selectedNodes);
+			DestroyBuildingPreviews();
+			_selectedNodes.Clear();
 		}
 	}
 
-	private void PlaceSelectedBuildingAt(GridNode targetNode)
+	private void PlaceSelectedBuildingsAt(List<GridNode> targetNodes)
 	{
-		var instance = _entityManager.Instantiate(buildEntries[_selectedBuildingIndex].BuildingEntity);
-		
-		_entityManager.SetComponentData<Translation>(instance, new Translation()
+		foreach (var node in targetNodes)
 		{
-			Value = targetNode.WorldPosition
-		});
+			var instance = _entityManager.Instantiate(buildEntries[_selectedBuildingIndex].BuildingEntity);
 		
-		targetNode.SetIsBlocked(true);
-		_pathfindingRefreshSystem.RequestRefresh();
+			_entityManager.SetComponentData<Translation>(instance, new Translation()
+			{
+				Value = node.WorldPosition
+			});
+		
+			node.SetIsBlocked(true);
+			_pathfindingRefreshSystem.RequestRefresh(node.WorldPosition);
+		}
 	}
 
 	private void SelectBuilding(int buildingIdx)
 	{
-		if (_buildingPreview != null)
-			Destroy(_buildingPreview);
+		DestroyBuildingPreviews();
 		
 		_selectedBuildingIndex = buildingIdx;
-		_buildingPreview = Instantiate(buildEntries[_selectedBuildingIndex].buildingPreview);
+		var preview = Instantiate(buildEntries[_selectedBuildingIndex].buildingPreview);
+		_buildingPreviews.Add(preview); 
+	}
+
+	private void DestroyBuildingPreviews()
+	{
+		for (int i = _buildingPreviews.Count - 1; i > 0; i--)
+		{
+			var toRemove = _buildingPreviews[i];
+			_buildingPreviews.Remove(toRemove);
+			Destroy(toRemove);
+		}
 	}
 
 	private void UpdateView()
