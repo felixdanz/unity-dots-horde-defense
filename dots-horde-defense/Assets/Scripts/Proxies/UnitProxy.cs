@@ -50,7 +50,7 @@ public class UnitProxy : MonoBehaviour, IConvertGameObjectToEntity
 		
 		// pathfinding testing
 		dstManager.AddBuffer<PathPointElement>(entity);
-		dstManager.AddComponentData(entity, new ActivePathfindingData()
+		dstManager.AddComponentData(entity, new PathfindingData()
 		{
 			CurrentPathIndex = -1,
 		});

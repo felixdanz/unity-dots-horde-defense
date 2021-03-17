@@ -346,7 +346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 861723321}
   targetPoint: {fileID: 0}
-  productionTime: 0.5
+  productionTime: 0.001
   entityToSpawn: {fileID: 4985449728276427751, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!114 &145989382
 MonoBehaviour:
@@ -656,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1587494907}
   targetPoint: {fileID: 0}
-  productionTime: 0.5
+  productionTime: 0.001
   entityToSpawn: {fileID: 4985449728276427751, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!114 &292611814
 MonoBehaviour:
@@ -1127,6 +1127,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4985449727723519396, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     - target: {fileID: 4985449728276427748, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1175,6 +1179,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ECSUnit (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4985449729238752735, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
+    - target: {fileID: 4985449729371066450, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!1001 &543352293
@@ -1649,7 +1661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 628780380}
   targetPoint: {fileID: 0}
-  productionTime: 0.5
+  productionTime: 0.001
   entityToSpawn: {fileID: 4985449728276427751, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!114 &659952799
 MonoBehaviour:
@@ -2192,6 +2204,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4985449727723519396, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     - target: {fileID: 4985449728276427748, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2240,6 +2256,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ECSUnit (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4985449729238752735, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
+    - target: {fileID: 4985449729371066450, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!1001 &961573049
@@ -2830,7 +2854,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1323468757}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.7, y: 0, z: 5.7}
+  m_LocalPosition: {x: 49.4, y: 0, z: 51.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1928719337}
@@ -3054,6 +3078,10 @@ PrefabInstance:
       propertyPath: MarkerSelected
       value: 
       objectReference: {fileID: 508881343}
+    - target: {fileID: 4985449727723519396, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     - target: {fileID: 4985449728276427748, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -3106,6 +3134,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ECSUnit (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4985449729238752735, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
+    - target: {fileID: 4985449729371066450, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     m_RemovedComponents:
     - {fileID: 3148160690775430646, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
@@ -3240,6 +3276,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4985449727723519396, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     - target: {fileID: 4985449728276427748, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -3288,6 +3328,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ECSUnit (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4985449729238752735, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
+    - target: {fileID: 4985449729371066450, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!1001 &1582156433
@@ -3451,6 +3499,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4985449727723519396, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     - target: {fileID: 4985449728276427748, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -3499,6 +3551,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ECSUnit (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4985449729238752735, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
+    - target: {fileID: 4985449729371066450, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 945811e43770e944cb254877a11ee9e1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2d65aa759187124e9afa4d55cb5cd98, type: 3}
 --- !u!1 &1683934456

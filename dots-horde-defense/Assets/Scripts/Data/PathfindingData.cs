@@ -1,24 +1,10 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 
-public struct PathfindingData : ISharedComponentData, IEquatable<PathfindingData>
+public struct PathfindingData : IComponentData
 {
-	public float3[] FlowField;
-	
-	
-	public bool Equals(PathfindingData other)
-	{
-		return Equals(FlowField, other.FlowField);
-	}
+	public int CurrentPathIndex;
 
-	public override bool Equals(object obj)
-	{
-		return obj is PathfindingData other && Equals(other);
-	}
-
-	public override int GetHashCode()
-	{
-		return (FlowField != null ? FlowField.GetHashCode() : 0);
-	}
+	public float3 StartPosition;
+	public float3 TargetPosition;
 }

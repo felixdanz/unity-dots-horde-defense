@@ -30,16 +30,29 @@ public class UnitControlSystem : SystemBase
 			var ecb = _endSimulationEcbSystem.CreateCommandBuffer();
 			var translationGroup = GetComponentDataFromEntity<Translation>(true);
 
+			// Entities.WithAll<Tag_UnitSelected>().ForEach((
+			// 	Entity entity,
+			// 	int entityInQueryIndex) =>
+			// {
+			// 	var requestPathfindingData = new RequestPathfindingData()
+			// 	{
+			// 		StartPosition = translationGroup[entity].Value,
+			// 		TargetPosition = raycastHit.Position,
+			// 	};
+			// 	ecb.AddComponent<RequestPathfindingData>(entity, requestPathfindingData);
+			// }).WithReadOnly(translationGroup).Run();
+			
+			// testing FlowField
+			
 			Entities.WithAll<Tag_UnitSelected>().ForEach((
 				Entity entity,
 				int entityInQueryIndex) =>
 			{
-				var requestPathfindingData = new RequestPathfindingData()
+				var requestFlowFieldData = new RequestFlowFieldData()
 				{
-					StartPosition = translationGroup[entity].Value,
 					TargetPosition = raycastHit.Position,
 				};
-				ecb.AddComponent<RequestPathfindingData>(entity, requestPathfindingData);
+				ecb.AddComponent<RequestFlowFieldData>(entity, requestFlowFieldData);
 			}).WithReadOnly(translationGroup).Run();
 			
 			_endSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);

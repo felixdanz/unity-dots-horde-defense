@@ -1,187 +1,278 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using TMPro;
+using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 
 public class FlowFieldSystem : SystemBase
 {
-	// private GridNode[] _nodes;
-	// private int _width, _height;
-	//
-	// private Dictionary<float3, PathfindingData> _createdFlowFields;
-	//
-	// private EndSimulationEntityCommandBufferSystem _endSimulationEcbSystem;
-	//
-	//
-	// protected override void OnCreate()
-	// {
-	// 	_endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-	//
-	// 	// TODO(FD): meh -.-
-	// 	_width = 100;
-	// 	_height = 100;
-	// 	_nodes = new GridNode[_width * _height];
-	// 	
-	// 	for (int z = 0, i = 0; z < _width; z++)
-	// 	for (int x = 0; x < _height; x++, i++)
-	// 	{
-	// 		// TODO(FD): implement later (isNodeBlocked)
-	// 		// if (SphereCast(
-	// 		// 	new float3(x, 1, z),
-	// 		// 	new float3(x, -1, z),
-	// 		// 	0.5f,
-	// 		// 	out var hitEntity))
-	// 		// {
-	// 		// 	
-	// 		// }
-	//
-	// 		var node = _nodes[i] = new GridNode(i, new float3(x, 0, z));
-	// 		UpdateNodeNeighbours(node, i);
-	// 	}
-	// }
-	//
-	// protected override void OnUpdate()
-	// {
-	// 	var ecb = _endSimulationEcbSystem.CreateCommandBuffer();
-	// 	
-	// 	Entities.WithAll<RequestPathfindingData>().ForEach((
-	// 		Entity entity,
-	// 		int entityInQueryIndex,
-	// 		in RequestPathfindingData requestPathfindingData) =>
-	// 	{
-	// 		var closestNodeIsFound = TryGetClosestNode(requestPathfindingData.TargetPosition, out var closestNode);
-	// 		
-	// 		ecb.RemoveComponent<RequestPathfindingData>(entity);
-	// 		
-	// 		if (!closestNodeIsFound)
-	// 			return;
-	//
-	// 		if (_createdFlowFields.TryGetValue(closestNode.GridPosition, out var foundPathfindingData))
-	// 		{
-	// 			ecb.AddSharedComponent(entity, foundPathfindingData);
-	// 		}
-	// 		else
-	// 		{
-	// 			var flowField = CreateFlowField(closestNode);
-	// 			var newPathfindingData = new PathfindingData()
-	// 			{
-	// 				FlowField = flowField,
-	// 			};
-	// 			_createdFlowFields.Add(closestNode.GridPosition, newPathfindingData);
-	// 			ecb.AddSharedComponent(entity, foundPathfindingData);
-	// 		}
-	// 	}).WithoutBurst().Run();
-	// }
-	//
-	// private void UpdateNodeNeighbours(GridNode node, int nodeIndex)
-	// {
-	// 	if (nodeIndex % _width > 0)
-	// 	{
-	// 		node.SetNeighbour(GridDirection.Left, _nodes[nodeIndex - 1]);
-	// 		_nodes[nodeIndex - 1].SetNeighbour(GridDirection.Right, node);
-	// 		
-	// 		if (nodeIndex >= _width)
-	// 		{
-	// 			node.SetNeighbour(GridDirection.DownLeft, _nodes[nodeIndex - _width - 1]);
-	// 			_nodes[nodeIndex - _width - 1].SetNeighbour(GridDirection.UpRight, node);
-	//         
-	// 			_nodes[nodeIndex - 1].SetNeighbour(GridDirection.DownRight, _nodes[nodeIndex - _width]);
-	// 			_nodes[nodeIndex - _width].SetNeighbour(GridDirection.UpLeft, _nodes[nodeIndex - 1]);
-	// 		}
-	// 	}
-	//     
-	// 	if (nodeIndex >= _width)
-	// 	{
-	// 		node.SetNeighbour(GridDirection.Down, _nodes[nodeIndex - _width]);
-	// 		_nodes[nodeIndex - _width].SetNeighbour(GridDirection.Up, node);
-	// 	}
-	// }
-	//
-	// private bool TryGetClosestNode(float3 inputPosition, out GridNode closestNode)
-	// {
-	// 	closestNode = null;
-	// 	
-	// 	var rX = UnityEngine.Mathf.RoundToInt(inputPosition.x);
-	//     var rZ = UnityEngine.Mathf.RoundToInt(inputPosition.z);
-	//     var index = rX + rZ * _width;
-	// 	
-	//     closestNode = _nodes[index];
-	//     return true;
-	// }
-	//
-	// private float3[] CreateFlowField(GridNode targetNode)
-	// {
-	// 	var flowField = new float3[_width * _height];
-	// 	
-	// 	var openSet = new List<GridNode>();
-	// 	var closedSet = new List<GridNode>();
-	// 	
-	// 	openSet.Add(targetNode);
-	//
-	// 	while (openSet.Count > 0)
-	// 	{
-	// 		var currentNode = openSet[0];
-	// 		
-	// 		for (var i = 0; i < openSet.Count)
-	// 	}
-	// }
-	//
-	// public List<Cell> FindPath(Cell startCell, Cell targetCell)
-	// {
-	// 	var openSet = new List<Cell>();
-	// 	var closedSet = new List<Cell>();
-	//
-	// 	openSet.Add(startCell);
-	//
-	// 	while (openSet.Count > 0)
-	// 	{
-	// 		var currentTile = openSet[0];
- //        
-	// 		for (var i = 1; i < openSet.Count; i++)
-	// 		{
-	// 			if (openSet[i].FCost < currentTile.FCost || 
-	// 			    openSet[i].FCost == currentTile.FCost && openSet[i].HCost < currentTile.HCost)
-	// 			{
-	// 				currentTile = openSet[i];
-	// 			}
-	// 		}
-	//
-	// 		openSet.Remove(currentTile);
-	// 		closedSet.Add(currentTile);
-	//
-	// 		// path found
-	// 		if (currentTile == targetCell)
-	// 		{
-	// 			return RetracePath(startCell, targetCell);
-	// 		}
- //        
-	// 		// continue searching
-	// 		foreach (var neighbour in currentTile.GetNeighbours())
-	// 		{
-	// 			if (neighbour is null || closedSet.Contains(neighbour))
-	// 				continue;
- //            
-	// 			var distanceToNeighbour = CellCoordinate.DistanceBetween(currentTile.GetCoordinate(), neighbour.GetCoordinate());
-	// 			var newMovementCostToNeighbour = currentTile.GCost + distanceToNeighbour + neighbour.GetTerrain().GetMovementCost();
-	//
-	// 			// if neighbours has good movement cost add to open set
-	// 			if (newMovementCostToNeighbour < neighbour.GCost || !openSet.Contains(neighbour))
-	// 			{
-	// 				neighbour.GCost = newMovementCostToNeighbour;
-	// 				neighbour.HCost = CellCoordinate.DistanceBetween(neighbour.GetCoordinate(), targetCell.GetCoordinate());
-	// 				neighbour.Parent = currentTile;
-	//
-	// 				if (!openSet.Contains(neighbour))
-	// 					openSet.Add(neighbour);
-	// 			}
-	// 		}
-	// 	}
-	//
-	// 	Debug.Log("Pathfinder: no path found");
-	// 	return null;
-	// }
+	private EndSimulationEntityCommandBufferSystem _endSimulationEcbSystem;
+	private NativeList<(int2, NativeArray<FlowFieldNode>)> _flowFields;
 	
+
+	protected override void OnCreate()
+	{
+		_endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+		_flowFields = new NativeList<(int2, NativeArray<FlowFieldNode>)>(Allocator.Persistent);
+	}
+
+	protected override void OnDestroy()
+	{
+		for (var i = _flowFields.Length - 1; i > 0; i--)
+		{
+			_flowFields[i].Item2.Dispose();
+		}
+		_flowFields.Dispose();
+	}
+
 	protected override void OnUpdate()
 	{
+		var ecb = _endSimulationEcbSystem.CreateCommandBuffer();
+			
+		var grid = GridController.Instance.Grid;
+		var gridWidth = grid.GetWidth();
+		var gridHeight = grid.GetHeight();
+		var gridCellSize = grid.GetCellSize();
 		
+		var flowFieldNodes = ConvertGridNodesToFlowField(grid.GetNodes());
+		
+		var flowFieldRequests = new List<(int2, CalculateFlowFieldJob, List<Entity>)>();
+		var jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
+
+		Entities.ForEach((				
+			Entity entity,
+			int entityInQueryIndex,
+			in RequestFlowFieldData requestFlowFieldData) =>
+			{
+				var targetNodeGridPosition = GetGridPositionFromWorld(
+					gridWidth, 
+					gridHeight, 
+					gridCellSize, 
+					requestFlowFieldData.TargetPosition);
+				
+				// check if flowField exists
+				for (var i = 0; i < _flowFields.Length; i++)
+				{
+					if (_flowFields[i].Item1.x == targetNodeGridPosition.x &&
+					    _flowFields[i].Item1.y == targetNodeGridPosition.y)
+					{
+						
+					}
+				}
+				
+				// check if request exists
+				for (var i = 0; i < flowFieldRequests.Count; i++)
+				{
+					if (flowFieldRequests[i].Item1.x == targetNodeGridPosition.x &&
+					    flowFieldRequests[i].Item1.y == targetNodeGridPosition.y)
+					{
+						flowFieldRequests[i].Item3.Add(entity);
+						ecb.RemoveComponent<RequestFlowFieldData>(entity); 
+						return;
+					}
+				}
+				
+				var targetNodeIndex = targetNodeGridPosition.x + targetNodeGridPosition.y * gridWidth;
+				var flowField = new NativeArray<FlowFieldNode>(flowFieldNodes, Allocator.Persistent);
+				
+				var calculateFlowFieldJob = new CalculateFlowFieldJob()
+				{
+					FlowField = flowField,
+					GridWidth = gridWidth,
+					TargetNodeIndex = targetNodeIndex,
+				};
+				
+				flowFieldRequests.Add((
+					targetNodeGridPosition, 
+					calculateFlowFieldJob, 
+					new List<Entity>() { entity }
+					));
+				
+				jobHandleList.Add(calculateFlowFieldJob.Schedule());
+				
+				ecb.RemoveComponent<RequestFlowFieldData>(entity);
+			}
+			).WithoutBurst().Run();
+		
+		JobHandle.CompleteAll(jobHandleList);
+
+		foreach (var (targetGridPosition, flowFieldJob, requestingEntities) in flowFieldRequests)
+		{
+			_flowFields.Add((targetGridPosition, flowFieldJob.FlowField));
+			
+			foreach (var requestingEntity in requestingEntities)
+			{
+				var flowFieldData = new FlowFieldData()
+				{
+					FlowFieldKey = targetGridPosition,
+					TargetPosition = flowFieldNodes[flowFieldJob.TargetNodeIndex].WorldPosition,
+				};
+				
+				ecb.AddComponent<FlowFieldData>(requestingEntity, flowFieldData);
+			}
+		}
+
+		jobHandleList.Dispose();
+		flowFieldNodes.Dispose();
 	}
+
+	[BurstCompile]
+	private struct CalculateFlowFieldJob : IJob
+	{
+		public NativeArray<FlowFieldNode> FlowField;
+		public int GridWidth;
+		public int TargetNodeIndex;
+
+		public void Execute()
+		{
+			var neighbourOffsets = new NativeArray<int>(8, Allocator.Temp)
+			{
+				[0] = GridWidth,			// up
+				[1] = GridWidth + 1,		// up right
+				[2] = 1,					// right
+				[3] = (-GridWidth) + 1,		// down right
+				[4] = (-GridWidth),			// down
+				[5] = -(GridWidth + 1),		// down left
+				[6] = -1,					// left
+				[7] = GridWidth - 1,		// up left
+			};
+			
+			var vectorsToNeighbours = new NativeArray<float3>(8, Allocator.Temp)
+			{
+				[0] = new float3(0, 0, 1),		// up
+				[1] = new float3(1, 0, 1),		// up right
+				[2] = new float3(1, 0, 0),		// right
+				[3] = new float3(1, 0, -1),	// down right
+				[4] = new float3(0, 0, -1),	// down
+				[5] = new float3(-1, 0, -1),	// down left
+				[6] = new float3(-1, 0, 0),	// left
+				[7] = new float3(-1, 0, 1),	// up left
+			};
+
+			var openSet = new NativeList<int>(Allocator.Temp);
+			var closedSet = new NativeList<int>(Allocator.Temp);
+			
+			openSet.Add(TargetNodeIndex);
+			
+			while (openSet.Length > 0)
+			{
+				var currentNodeIndex = openSet[0];
+				var currentNode = FlowField[currentNodeIndex];
+				
+				for (var i = 0; i < openSet.Length; i++)
+				{
+					if (openSet[i] != currentNode.Index) 
+						continue;
+					
+					openSet.RemoveAtSwapBack(i);
+					break;
+				}
+				
+				closedSet.Add(currentNode.Index);
+				
+				for (var i = 0; i < neighbourOffsets.Length; i++)
+				{
+					var neighbourIndex = currentNodeIndex + neighbourOffsets[i];
+					
+					if (neighbourIndex < 0 || neighbourIndex >= FlowField.Length ||
+					    closedSet.Contains(neighbourIndex))
+						continue;
+
+					var neighbourNode = FlowField[neighbourIndex];
+					
+					if (neighbourNode.IsBlocked)
+						continue;
+
+					var neighbourDistance = currentNode.Distance + 1;
+
+					if (neighbourDistance < neighbourNode.Distance || !openSet.Contains(neighbourIndex))
+					{
+						neighbourNode.Distance = neighbourDistance;
+						FlowField[neighbourIndex] = neighbourNode;
+
+						if (!openSet.Contains(neighbourIndex))
+							openSet.Add(neighbourIndex);
+					}
+				}
+			}
+
+			for (var nodeIndex = 0; nodeIndex < FlowField.Length; nodeIndex++)
+			{
+				var currentNode = FlowField[nodeIndex];
+				var bestDistance = int.MaxValue;
+
+				for (var i = 0; i < neighbourOffsets.Length; i++)
+				{
+					var neighbourIndex = nodeIndex + neighbourOffsets[i];
+
+					if (neighbourIndex < 0 || neighbourIndex >= FlowField.Length)
+						continue;
+
+					var neighbourNode = FlowField[neighbourIndex];
+
+					if (neighbourNode.Distance < bestDistance)
+					{
+						bestDistance = neighbourNode.Distance;
+						currentNode.Direction = vectorsToNeighbours[i];
+					}
+				}
+				
+				FlowField[nodeIndex] = currentNode;
+			}
+		}
+	}
+	
+	private static int2 GetGridPositionFromWorld(int gridWidth, int gridHeight, float cellSize, float3 worldPosition)
+	{
+		var percentX = worldPosition.x / (gridWidth * cellSize);
+		var percentZ = worldPosition.z / (gridHeight * cellSize);
+
+		percentX = math.clamp(percentX, 0.0f, 1.0f);
+		percentZ = math.clamp(percentZ, 0.0f, 1.0f);
+
+		var intX = (int) Math.Round(percentX * (gridWidth - 1), 0);
+		var intZ = (int) Math.Round(percentZ * (gridHeight - 1), 0);
+
+		return new int2(intX, intZ);
+	}
+
+	private NativeArray<FlowFieldNode> ConvertGridNodesToFlowField(GridNode[] gridNodes)
+	{
+		var flowField = new NativeArray<FlowFieldNode>(gridNodes.Length, Allocator.Temp);
+		
+		foreach (var gridNode in gridNodes)
+		{
+			var flowFieldNode = new FlowFieldNode()
+			{
+				Index = gridNode.GridIndex,
+				X = gridNode.X,
+				Z = gridNode.Z,
+				WorldPosition = gridNode.WorldPosition,
+				Distance = int.MaxValue,
+				Direction = new float3(0, 0,0 ),
+				IsBlocked = gridNode.IsBlocked,
+			};
+
+			flowField[gridNode.GridIndex] = flowFieldNode;
+		}
+
+		return flowField;
+	}
+}
+
+public struct FlowFieldNode
+{
+	public int Index;					// Index in Grid
+
+	public int X;						// X pos in grid
+	public int Z;						// Z pos in grid
+	public float3 WorldPosition;		// Position in World Space
+
+	public int Distance;				// Distance	from target		
+	public float3 Direction;			// Direction to next node
+
+	public bool IsBlocked;				// blocked = not accessible
 }

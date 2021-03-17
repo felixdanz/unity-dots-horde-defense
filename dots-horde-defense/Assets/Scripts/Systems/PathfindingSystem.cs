@@ -50,7 +50,6 @@ public class PathfindingSystem : SystemBase
 					RequestingEntity = entity,
 					PathNodes = tmpPathNodes,
 					GridWidth = gridWidth,
-					GridHeight = gridHeight,
 					StartGridPosition = startGridPosition,
 					TargetGridPosition = targetGridPosition,
 					TargetNodeIndex = tmpTargetIndex,
@@ -59,7 +58,7 @@ public class PathfindingSystem : SystemBase
 				findPathJobList.Add(findPathJob);
 				jobHandleList.Add(findPathJob.Schedule());
 				
-				ecb.RemoveComponent<RequestPathfindingData>(entity); 
+				ecb.RemoveComponent<RequestPathfindingData>(entity);
 			}
 			).WithoutBurst().Run();
 		
@@ -73,7 +72,7 @@ public class PathfindingSystem : SystemBase
 				PathNodes = findPathJob.PathNodes,
 				TargetNodeIndex = findPathJob.TargetNodeIndex,
 				PathPointBufferFromEntity = GetBufferFromEntity<PathPointElement>(),
-				PathCurrentIndexDataFromEntity = GetComponentDataFromEntity<ActivePathfindingData>(),
+				PathCurrentIndexDataFromEntity = GetComponentDataFromEntity<PathfindingData>(),
 			}.Run();
 		}
 		
@@ -90,7 +89,7 @@ public class PathfindingSystem : SystemBase
 		[DeallocateOnJobCompletion] public NativeArray<int> TargetNodeIndex;
 
 		public BufferFromEntity<PathPointElement> PathPointBufferFromEntity;
-		public ComponentDataFromEntity<ActivePathfindingData> PathCurrentIndexDataFromEntity;
+		public ComponentDataFromEntity<PathfindingData> PathCurrentIndexDataFromEntity;
 		
 		public void Execute()
 		{
@@ -101,7 +100,7 @@ public class PathfindingSystem : SystemBase
 
 			if (targetNode.ParentIndex == -1)
 			{
-				PathCurrentIndexDataFromEntity[RequestingEntity] = new ActivePathfindingData()
+				PathCurrentIndexDataFromEntity[RequestingEntity] = new PathfindingData()
 				{
 					CurrentPathIndex = -1,
 				};
@@ -118,7 +117,7 @@ public class PathfindingSystem : SystemBase
 				currentNode = parentNode;
 			}
 
-			PathCurrentIndexDataFromEntity[RequestingEntity] = new ActivePathfindingData()
+			PathCurrentIndexDataFromEntity[RequestingEntity] = new PathfindingData()
 			{
 				CurrentPathIndex = pathPointBuffer.Length - 1,
 				StartPosition = pathPointBuffer[pathPointBuffer.Length - 1].Position,
@@ -133,7 +132,6 @@ public class PathfindingSystem : SystemBase
 		public Entity RequestingEntity;
 		public NativeArray<PathNode> PathNodes;
 		public int GridWidth;
-		public int GridHeight;
 		public int2 StartGridPosition;
 		public int2 TargetGridPosition;
 		public NativeArray<int> TargetNodeIndex;

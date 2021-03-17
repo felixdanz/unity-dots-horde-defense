@@ -4,39 +4,77 @@ using Unity.Transforms;
 
 public class MoveSystem : SystemBase
 {
+	private EndSimulationEntityCommandBufferSystem _endSimulationEcbSystem;
+	
+	protected override void OnCreate()
+	{
+		_endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+	}
+	
+	
 	protected override void OnUpdate()
 	{
+		var ecb = _endSimulationEcbSystem.CreateCommandBuffer().AsParallelWriter();
 		var deltaTime = Time.DeltaTime;
 		
+		// normal A* pathfinding movement
 		Entities.ForEach((
 			Entity entity,
 			int entityInQueryIndex,
 			ref Translation translation,
 			ref MovementSpeed movementSpeed,
 			ref DynamicBuffer<PathPointElement> pathBuffer,
-			ref ActivePathfindingData activePathfindingData
+			ref PathfindingData pathfindingData
 			) => 
 			{
-				if (activePathfindingData.CurrentPathIndex < 0)
+				if (pathfindingData.CurrentPathIndex < 0)
 					return;
 				
 				var distanceToTarget = math.distance(
-					pathBuffer[activePathfindingData.CurrentPathIndex].Position, 
+					pathBuffer[pathfindingData.CurrentPathIndex].Position, 
 					translation.Value);
 				
 				if (distanceToTarget == 0)
 				{
-					activePathfindingData.CurrentPathIndex--;
+					pathfindingData.CurrentPathIndex--;
 					return;
 				}
 				
 				MoveTo(
 					ref translation, 
-					pathBuffer[activePathfindingData.CurrentPathIndex].Position,
+					pathBuffer[pathfindingData.CurrentPathIndex].Position,
 					movementSpeed.Value, 
 					deltaTime); 
 			}
 			).ScheduleParallel();
+		
+		// flowField pathfinding movement
+		Entities.ForEach((
+				Entity entity,
+				int entityInQueryIndex,
+				ref Translation translation,
+				ref MovementSpeed movementSpeed,
+				ref FlowFieldData flowFieldData
+			) => 
+			{
+				
+				var distanceToTarget = math.distance(
+					flowFieldData.TargetPosition, 
+					translation.Value);
+				
+				if (distanceToTarget == 0)
+				{
+					ecb.RemoveComponent<FlowFieldData>(entityInQueryIndex, entity);
+					return;
+				}
+				
+				// MoveTo(
+				// 	ref translation, 
+				// 	pathBuffer[activePathfindingData.CurrentPathIndex].Position,
+				// 	movementSpeed.Value, 
+				// 	deltaTime); 
+			}
+		).ScheduleParallel();
 	}
 
 	private static void MoveTo(

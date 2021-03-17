@@ -31,7 +31,7 @@ public class PathfindingRefreshSystem : SystemBase
 		Entities.ForEach((
 				Entity entity,
 				int entityInQueryIndex,
-				ref ActivePathfindingData activePathfindingData,
+				ref PathfindingData activePathfindingData,
 				in DynamicBuffer<PathPointElement> pathBuffer) => 
 			{
 				if (activePathfindingData.CurrentPathIndex == -1)
@@ -52,12 +52,12 @@ public class PathfindingRefreshSystem : SystemBase
 					return;
 				
 
-				var newActivePathfindingData = new ActivePathfindingData()
+				var newActivePathfindingData = new PathfindingData()
 				{
 					CurrentPathIndex = -1,
 				};
 				
-				ecb.SetComponent<ActivePathfindingData>(entityInQueryIndex, entity, newActivePathfindingData);
+				ecb.SetComponent<PathfindingData>(entityInQueryIndex, entity, newActivePathfindingData);
 				
 				var requestPathfindingData = new RequestPathfindingData()
 				{
