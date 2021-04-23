@@ -1,22 +1,22 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
 
 public class GridNode
 {
     public int GridIndex { get; }
     public int X { get; }
-    public int Z { get; }
+    public int Y { get; }
     public Vector3 WorldPosition { get; }
+    
+    private readonly GridNode[] _neighbours = new GridNode[8];
+    
     public bool IsBlocked { get; private set; }
 
-    private readonly GridNode[] _neighbours = new GridNode[8];
 
-
-    public GridNode(int gridIndex, int x, int z, Vector3 worldPosition, bool isBlocked)
+    public GridNode(int gridIndex, int x, int y, Vector3 worldPosition, bool isBlocked)
     {
         GridIndex = gridIndex;
         X = x;
-        Z = z;
+        Y = y;
         WorldPosition = worldPosition;
         IsBlocked = isBlocked;
     }

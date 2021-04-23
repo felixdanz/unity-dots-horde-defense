@@ -49,32 +49,32 @@ public class MoveSystem : SystemBase
 			).ScheduleParallel();
 		
 		// flowField pathfinding movement
-		Entities.ForEach((
-				Entity entity,
-				int entityInQueryIndex,
-				ref Translation translation,
-				ref MovementSpeed movementSpeed,
-				ref FlowFieldData flowFieldData
-			) => 
-			{
-				
-				var distanceToTarget = math.distance(
-					flowFieldData.TargetPosition, 
-					translation.Value);
-				
-				if (distanceToTarget == 0)
-				{
-					ecb.RemoveComponent<FlowFieldData>(entityInQueryIndex, entity);
-					return;
-				}
-				
-				// MoveTo(
-				// 	ref translation, 
-				// 	pathBuffer[activePathfindingData.CurrentPathIndex].Position,
-				// 	movementSpeed.Value, 
-				// 	deltaTime); 
-			}
-		).ScheduleParallel();
+		// Entities.ForEach((
+		// 		Entity entity,
+		// 		int entityInQueryIndex,
+		// 		ref Translation translation,
+		// 		ref MovementSpeed movementSpeed,
+		// 		ref FlowFieldData flowFieldData
+		// 	) => 
+		// 	{
+		// 		
+		// 		var distanceToTarget = math.distance(
+		// 			flowFieldData.TargetPosition, 
+		// 			translation.Value);
+		// 		
+		// 		if (distanceToTarget == 0)
+		// 		{
+		// 			ecb.RemoveComponent<FlowFieldData>(entityInQueryIndex, entity);
+		// 			return;
+		// 		}
+		// 		
+		// 		// MoveTo(
+		// 		// 	ref translation, 
+		// 		// 	pathBuffer[activePathfindingData.CurrentPathIndex].Position,
+		// 		// 	movementSpeed.Value, 
+		// 		// 	deltaTime); 
+		// 	}
+		// ).ScheduleParallel();
 	}
 
 	private static void MoveTo(

@@ -259,7 +259,7 @@ public class PathfindingSystem : SystemBase
 				Index = gridNode.GridIndex,
 				ParentIndex = -1,
 				X = gridNode.X,
-				Z = gridNode.Z,
+				Z = gridNode.Y,
 				WorldPosition = gridNode.WorldPosition,
 				IsBlocked = gridNode.IsBlocked,
 			};

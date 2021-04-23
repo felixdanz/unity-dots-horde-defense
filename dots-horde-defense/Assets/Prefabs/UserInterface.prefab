@@ -111,15 +111,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5426c0359cf34646b9022ead4c7c9824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildEntries:
-  - buildingName: Factory
-    icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-    buildingPreview: {fileID: 3609386851630735372, guid: c52bef23cb5bc0d40a3a94d0b3bf7cd4, type: 3}
-    buildingPrefab: {fileID: 9088259604450421018, guid: 9d871c4e56fedae4bbb3c3ce86b45545, type: 3}
-  - buildingName: Wall
-    icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-    buildingPreview: {fileID: 6720647312469224931, guid: cd4cbf46867e1de409102befb7fd68d9, type: 3}
-    buildingPrefab: {fileID: 2161349977980470775, guid: b569e8de5d97a824691b46519ef9cd33, type: 3}
+  buildingData:
+  - {fileID: 11400000, guid: 11260e36c741ead4eb22879cb7c47887, type: 2}
+  - {fileID: 11400000, guid: c6474b8dd16735947872207c4195c032, type: 2}
+  - {fileID: 11400000, guid: 7fc771f8eac1304408229bffc03f4e88, type: 2}
   entryParent: {fileID: 1011717290916859386}
   entryPrefab: {fileID: 7525047183591723760, guid: 08b906fc4c44cdc4680fcca2315c4437, type: 3}
 --- !u!222 &1011717291115379768

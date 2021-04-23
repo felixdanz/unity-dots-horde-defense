@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class GridController : MonoBehaviour
@@ -32,7 +27,7 @@ public class GridController : MonoBehaviour
 		}
 		else
 		{
-			Destroy(this.gameObject);
+			Destroy(gameObject);
 		}
 
 		#endregion

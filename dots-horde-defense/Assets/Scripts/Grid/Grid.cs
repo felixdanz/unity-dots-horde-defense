@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NUnit.Framework;
 using Unity.Entities;
 using Unity.Physics.Systems;
 using UnityEngine;
@@ -23,10 +22,10 @@ public class Grid
 
 		var buildPhysicsWorldSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
 
-		for (int z = 0, i = 0; z < _height; z++)
+		for (int y = 0, i = 0; y < _height; y++)
 		for (int x= 0; x < _width; x++, i++)
 		{
-			var worldPosition = new Vector3(x, 0, z) * _cellSize + _origin;
+			var worldPosition = new Vector3(x, 0, y) * _cellSize + _origin;
 			var hasHitObstacle = PhysicsUtilities.SphereCast(
 				buildPhysicsWorldSystem,
 				PhysicsUtilities.GetCollisionFilter(PhysicCategories.Obstacle),
@@ -34,8 +33,8 @@ public class Grid
 				worldPosition - Vector3.up * 5,
 				0.5f,
 				out _);
-
-			var node = _nodes[i] = new GridNode(i, x, z, worldPosition, hasHitObstacle);
+			
+			var node = _nodes[i] = new GridNode(i, x, y, worldPosition, hasHitObstacle);
 			UpdateNodeNeighbours(node, i);
 		}
 	}
@@ -64,30 +63,60 @@ public class Grid
 		}
 	}
 	
+	// TODO(FD): closest node sometimes returns false node (offset by 1)
 	public GridNode GetClosestNode(Vector3 worldPosition)
 	{
 		var percentX = worldPosition.x / (_width * _cellSize);
-		var percentZ = worldPosition.z / (_height * _cellSize);
-
+		var percentY = worldPosition.z / (_height * _cellSize);
+		
 		percentX = Mathf.Clamp(percentX, 0.0f, 1.0f);
-		percentZ = Mathf.Clamp(percentZ, 0.0f, 1.0f);
-
+		percentY = Mathf.Clamp(percentY, 0.0f, 1.0f);
+		
 		var intX = Mathf.RoundToInt(percentX * (_width - 1));
-		var intZ = Mathf.RoundToInt(percentZ * (_height - 1));
-
-		return _nodes[intX + intZ * _width];
+		var intY = Mathf.RoundToInt(percentY * (_height - 1));
+		
+		return _nodes[intX + intY * _width];
 	}
 	
-	// TODO(FD): increase possible selections
-	public List<GridNode> GetNodesBetween(GridNode nodeA, GridNode nodeB)
+	public List<GridNode> GetNodesOnLineBetween(GridNode nodeA, Vector3 positionB)
 	{
+		var nodeB = GetClosestNode(positionB);
+		return GetNodesOnLineBetween(nodeA, nodeB);
+	}
+	
+	public List<GridNode> GetNodesOnLineBetween(GridNode nodeA, GridNode nodeB)
+	{
+		if (nodeA == nodeB)
+			return new List<GridNode>() { nodeA };
+		
 		var result = new List<GridNode>();
-		var origin = nodeA.GridIndex < nodeB.GridIndex ? nodeA : nodeB;
-		var target = origin == nodeA ? nodeB : nodeA;
 
-		for (int i = origin.GridIndex; i < target.GridIndex; i++)
+		var xDiff = Mathf.Abs(nodeB.X - nodeA.X);
+		var yDiff = Mathf.Abs(nodeB.Y - nodeA.Y);
+		
+		var startNode = xDiff >= yDiff
+			? nodeA.X <= nodeB.X 
+				? nodeA 
+				: nodeB
+			: nodeA.Y <= nodeB.Y
+				? nodeA
+				: nodeB;
+		
+		if (xDiff >= yDiff)
 		{
-			result.Add(_nodes[i]);
+			for (var i = 0; i < xDiff; i++)
+			{
+				var newX = startNode.X + i;
+				result.Add(_nodes[newX + startNode.Y * _width]);
+			}
+		}
+		else
+		{
+			for (var i = 0; i < yDiff; i++)
+			{
+				var newY = startNode.Y + i;
+				result.Add(_nodes[startNode.X + newY * _width]);
+			}
 		}
 
 		return result;

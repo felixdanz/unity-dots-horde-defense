@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using TMPro;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 
+/*
+ * !! Work In Progress !!
+ *   currently not used
+ */
 public class FlowFieldSystem : SystemBase
 {
 	private EndSimulationEntityCommandBufferSystem _endSimulationEcbSystem;
@@ -15,21 +18,23 @@ public class FlowFieldSystem : SystemBase
 
 	protected override void OnCreate()
 	{
-		_endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-		_flowFields = new NativeList<(int2, NativeArray<FlowFieldNode>)>(Allocator.Persistent);
+		// _endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+		// _flowFields = new NativeList<(int2, NativeArray<FlowFieldNode>)>(Allocator.Persistent);
 	}
 
 	protected override void OnDestroy()
 	{
-		for (var i = _flowFields.Length - 1; i > 0; i--)
-		{
-			_flowFields[i].Item2.Dispose();
-		}
-		_flowFields.Dispose();
+		// for (var i = _flowFields.Length - 1; i > 0; i--)
+		// {
+		// 	_flowFields[i].Item2.Dispose();
+		// }
+		// _flowFields.Dispose();
 	}
 
 	protected override void OnUpdate()
 	{
+		return; // disabled
+		
 		var ecb = _endSimulationEcbSystem.CreateCommandBuffer();
 			
 		var grid = GridController.Instance.Grid;
@@ -249,7 +254,7 @@ public class FlowFieldSystem : SystemBase
 			{
 				Index = gridNode.GridIndex,
 				X = gridNode.X,
-				Z = gridNode.Z,
+				Z = gridNode.Y,
 				WorldPosition = gridNode.WorldPosition,
 				Distance = int.MaxValue,
 				Direction = new float3(0, 0,0 ),
