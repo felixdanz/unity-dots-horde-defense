@@ -182,17 +182,38 @@ public class BuildMenu : MonoBehaviour
 		foreach (var node in targetNodes)
 			PlaceSelectedBuildingOn(node);
 	}
-
+	
 	private void PlaceSelectedBuildingOn(GridNode targetNode)
 	{
 		var instance = _entityManager.Instantiate(dataToEntity[_selectedBuildingIndex]);
+		
+		targetNode.Building = instance;
+		targetNode.SetIsBlocked(true);
 		
 		_entityManager.SetComponentData<Translation>(instance, new Translation()
 		{
 			Value = targetNode.WorldPosition
 		});
+
+		_entityManager.SetComponentData<GridPositionData>(instance, new GridPositionData()
+		{
+			IndexInGrid = targetNode.GridIndex,
+			X = targetNode.X,
+			Y = targetNode.Y,
+		});
+
+		_entityManager.AddComponentData<Tag_NeedsStateUpdate>(instance, new Tag_NeedsStateUpdate());
+
+		foreach (var neighbourNode in targetNode.Neighbours)
+		{
+			if (neighbourNode.Building == Entity.Null)
+				continue;
+			
+			_entityManager.AddComponentData<Tag_NeedsStateUpdate>(
+				neighbourNode.Building, 
+				new Tag_NeedsStateUpdate());
+		}
 		
-		targetNode.SetIsBlocked(true);
 		_pathfindingRefreshSystem.RequestRefresh(targetNode.WorldPosition);
 	}
 

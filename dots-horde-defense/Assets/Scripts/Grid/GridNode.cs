@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Entities;
+using UnityEngine;
 
 public class GridNode
 {
@@ -11,6 +12,9 @@ public class GridNode
     
     public bool IsBlocked { get; private set; }
 
+    // TODO(FD): experimental
+    public Entity Building;
+
 
     public GridNode(int gridIndex, int x, int y, Vector3 worldPosition, bool isBlocked)
     {
@@ -19,6 +23,7 @@ public class GridNode
         Y = y;
         WorldPosition = worldPosition;
         IsBlocked = isBlocked;
+        Building = Entity.Null;
     }
 
     public void SetIsBlocked(bool value) => IsBlocked = value;

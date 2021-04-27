@@ -61,7 +61,7 @@ public class GridController : MonoBehaviour
 
 		foreach (var gridNode in Grid.GetNodes())
 		{
-			Gizmos.color = gridNode.IsBlocked
+			Gizmos.color = gridNode.Building != Entity.Null
 				? Color.red
 				: Color.green;
 			

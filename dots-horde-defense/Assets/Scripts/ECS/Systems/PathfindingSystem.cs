@@ -269,20 +269,20 @@ public class PathfindingSystem : SystemBase
 
 		return pathNodes;
 	}
-}
-
-public struct PathNode
-{
-	public int Index;						// Index in Grid
-	public int ParentIndex;					// Index of PathParent in Grid
 	
-	public int X;							// X pos in grid
-	public int Z;							// Z pos in grid
-	public float3 WorldPosition;			// Position in World Space	
+	private struct PathNode
+	{
+		public int Index;						// Index in Grid
+		public int ParentIndex;					// Index of PathParent in Grid
+	
+		public int X;							// X pos in grid
+		public int Z;							// Z pos in grid
+		public float3 WorldPosition;			// Position in World Space	
 
-	public int GCost;						// distance to starting node
-	public int HCost;						// distance to target node
-	public int FCost => GCost + HCost;		// combined cost
+		public int GCost;						// distance to starting node
+		public int HCost;						// distance to target node
+		public int FCost => GCost + HCost;		// combined cost
 
-	public bool IsBlocked;					// blocked = not accessible
+		public bool IsBlocked;					// blocked = not accessible
+	}
 }
